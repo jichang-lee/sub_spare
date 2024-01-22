@@ -48,18 +48,14 @@ public class UserService {
                 .build();
     }
 
-    @Transactional
+    @Transactional //editor 개선 필요해보임
     public void editUser(Long id , UserEdit userEdit){
-        Optional<User> byId = userRepository.findById(id);
-        if(byId.isPresent()){
-            throw new UserNotFound();
-        }
-        User user = User.builder()
-                .email(userEdit.getEmail())
-                .password(userEdit.getPassword())
-                .username(userEdit.getUsername())
-                .build();
-        userRepository.save(user);
+        User user = userRepository.findById(id)
+                .orElseThrow(UserNotFound::new);
+
+        user.editor(userEdit.getEmail() != null ? userEdit.getEmail() : user.getEmail(),
+                userEdit.getPassword() != null ? userEdit.getPassword() : user.getPassword(),
+                userEdit.getUsername() != null ? userEdit.getUsername() : user.getUsername());
     }
 
 }

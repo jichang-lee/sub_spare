@@ -85,9 +85,15 @@ class UserServiceTest {
         UserEdit userEdit = UserEdit.builder()
                 .email("jccc2@gamil.com")
                 .password("pass11")
-                .username("창지이")
                 .build();
-
+        //when
         userService.editUser(user.getId(),userEdit);
+        //then
+        User chanegUser = userRepository.findById(user.getId())
+                .orElseThrow(()->new RuntimeException("해당 유저가 없습니다 PK ---> "+user.getId()));
+        Assertions.assertEquals("jccc2@gamil.com",chanegUser.getEmail());
+        Assertions.assertEquals("이지창",chanegUser.getUsername());
+
+
     }
 }
