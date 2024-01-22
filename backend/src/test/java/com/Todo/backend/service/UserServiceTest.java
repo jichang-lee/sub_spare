@@ -4,6 +4,7 @@ import com.Todo.backend.domain.User;
 import com.Todo.backend.exception.AlreadyExistsEmail;
 import com.Todo.backend.repository.UserRepository;
 import com.Todo.backend.request.user.SignUp;
+import com.Todo.backend.request.user.UserEdit;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +24,7 @@ class UserServiceTest {
     private PasswordEncoder passwordEncoder;
 
 
-    @AfterEach
+    @BeforeEach
     void clean(){
         userRepository.deleteAll();
     }
@@ -69,4 +70,24 @@ class UserServiceTest {
         assertThrows(AlreadyExistsEmail.class,()-> userService.Signup(signUp));
     }
 
+
+    @Test
+    @DisplayName("회원수정")
+    void test3(){
+        User user = User.builder()
+                .email("jccc23@naver.com")
+                .password("pass13")
+                .username("이지창")
+                .build();
+        userRepository.save(user);
+
+        //given
+        UserEdit userEdit = UserEdit.builder()
+                .email("jccc2@gamil.com")
+                .password("pass11")
+                .username("창지이")
+                .build();
+
+        userService.editUser(user.getId(),userEdit);
+    }
 }

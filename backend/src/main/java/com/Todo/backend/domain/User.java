@@ -32,4 +32,11 @@ public class User {
         this.username = username;
         this.createAt = LocalDateTime.now();
     }
+
+    public void editor(String email, String password, String username){
+        this.email = email;
+        this.password = password;
+        this.username = username;
+        this.createAt = LocalDateTime.now();
+    }
 }
