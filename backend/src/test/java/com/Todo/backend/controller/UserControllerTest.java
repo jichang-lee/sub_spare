@@ -3,6 +3,7 @@ package com.Todo.backend.controller;
 import com.Todo.backend.domain.User;
 import com.Todo.backend.repository.UserRepository;
 import com.Todo.backend.request.user.SignUp;
+import com.Todo.backend.request.user.UserEdit;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -68,4 +69,30 @@ class UserControllerTest {
 
     }
 
+    @Test
+    @DisplayName("회원가입 수정")
+    void test2() throws Exception{
+        User user = User.builder()
+                .email("jccc23@naver.com")
+                .password("pass12")
+                .username("이지창")
+                .build();
+        userRepository.save(user);
+
+        //given
+        UserEdit userEdit = UserEdit.builder()
+                .email("jccc2@gmail.com")
+                .password("pass1")
+                .username("창지이")
+                .build();
+        String json = objectMapper.writeValueAsString(userEdit);
+        //expected
+        mockMvc.perform(MockMvcRequestBuilders.patch("/user/update/{userId}",user.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+
+    }
 }
